@@ -4,6 +4,8 @@
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_panel_vendor.h"
 #include "esp_log.h"
+#include "esp_lvgl_port.h"
+#include "lvgl.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -85,29 +87,48 @@ void app_main(void)
     /* ── 7. 打开显示并开启背光 ── */
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
 
-    static uint16_t line[EXAMPLE_LCD_H_RES];
-    const uint16_t colors[] = {
-        0xF800, // red
-        0x07E0, // green
-        0x001F, // blue
-        0xFFFF, // white
-    };
-
     gpio_set_level(EXAMPLE_PIN_NUM_BK_LIGHT, 1);
 
-    while (true) {
-        for (int color_index = 0; color_index < 4; ++color_index) {
-            for (int x = 0; x < EXAMPLE_LCD_H_RES; ++x) {
-                line[x] = colors[color_index];
-            }
+    const lvgl_port_cfg_t lvgl_cfg = ESP_LVGL_PORT_INIT_CONFIG();
+    ESP_ERROR_CHECK(lvgl_port_init(&lvgl_cfg));
 
-            for (int y = 0; y < EXAMPLE_LCD_V_RES; ++y) {
-                ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(panel_handle, 0, y, EXAMPLE_LCD_H_RES, y + 1, line));
-            }
+    lvgl_port_display_cfg_t disp_cfg = { 0 };
+    disp_cfg.io_handle = io_handle;
+    disp_cfg.panel_handle = panel_handle;
+    disp_cfg.buffer_size = EXAMPLE_LCD_H_RES * 40;
+    disp_cfg.double_buffer = true;
+    disp_cfg.hres = EXAMPLE_LCD_H_RES;
+    disp_cfg.vres = EXAMPLE_LCD_V_RES;
+    disp_cfg.monochrome = false;
+    disp_cfg.color_format = LV_COLOR_FORMAT_RGB565;
+    disp_cfg.rotation.swap_xy = false;
+    disp_cfg.rotation.mirror_x = false;
+    disp_cfg.rotation.mirror_y = false;
+    disp_cfg.flags.buff_dma = true;
+    disp_cfg.flags.swap_bytes = false;
 
-            vTaskDelay(pdMS_TO_TICKS(1000));
-        }
+    lv_display_t *disp = lvgl_port_add_disp(&disp_cfg);
+    ESP_ERROR_CHECK(disp ? ESP_OK : ESP_FAIL);
+
+    if (lvgl_port_lock(0)) {
+        lv_obj_t *screen = lv_screen_active();
+        lv_obj_set_style_bg_color(screen, lv_color_hex(0x000000), 0);
+        lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, 0);
+
+        lv_obj_t *label = lv_label_create(screen);
+        lv_label_set_text(label, "\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8c\xe4\xb8\xad\xe6\x96\x87\xe6\x98\xbe\xe7\xa4\xba\nHello ESP32");
+        lv_obj_set_style_text_font(label, &lv_font_source_han_sans_sc_16_cjk, 0);
+        lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);
+        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
+        lv_obj_set_width(label, EXAMPLE_LCD_H_RES - 20);
+        lv_obj_center(label);
+
+        lvgl_port_unlock();
     }
 
     ESP_LOGI(TAG, "ST7789 240x240 初始化完成！");
+
+    while (true) {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
