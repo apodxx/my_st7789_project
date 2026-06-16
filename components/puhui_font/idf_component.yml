@@ -1,0 +1,5 @@
+description: Alibaba PuHuiTi common CJK font loader (xiaozhi-fonts cbin format)
+license: MIT
+dependencies:
+  idf: '>=5.2'
+  lvgl/lvgl: '>=9.0'

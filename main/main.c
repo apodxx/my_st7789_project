@@ -1,4 +1,5 @@
 #include "display.h"
+#include "font_loader.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -13,6 +14,12 @@ void app_main(void)
     lv_display_t *disp = NULL;
 
     display_init(&io_handle, &panel_handle, &disp);
+
+    if (!font_loader_init()) {
+        ESP_LOGE(TAG, "中文字库初始化失败");
+        return;
+    }
+
     ui_create_demo_screen();
 
     ESP_LOGI(TAG, "ST7789 240x240 初始化完成");

@@ -1,2 +1,5 @@
 build/
 managed_components/
+tools/node_modules/
+tools/subset.otf
+tools/SourceHanSansSC-Regular.otf
