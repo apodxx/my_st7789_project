@@ -1,5 +1,16 @@
 {
-    "idf.currentSetup": "d:\\esp\\v5.2.7\\esp-idf",
-    "idf.flashType": "UART",
-    "idf.portWin": "COM4"
+  "idf.currentSetup": "e:\\esp\\v5.3.5\\esp-idf",
+  "idf.flashType": "UART",
+  "idf.portWin": "COM4",
+  "clangd.path": "C:\\Espressif\\tools\\esp-clang\\16.0.1-fe4f10a809\\esp-clang\\bin\\clangd.exe",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=**",
+    "--compile-commands-dir=d:\\Users\\DELL\\Desktop\\st7789_display-main\\build"
+  ],
+  "idf.customExtraVars": {
+    "OPENOCD_SCRIPTS": "d:\\Users\\DELL\\.espressif\\tools\\openocd-esp32\\v0.12.0-esp32-20251215/openocd-esp32/share/openocd/scripts",
+    "IDF_CCACHE_ENABLE": "1",
+    "ESP_ROM_ELF_DIR": "d:\\Users\\DELL\\.espressif\\tools\\esp-rom-elfs\\20240305/"
+  }
 }

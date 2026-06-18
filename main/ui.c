@@ -2,8 +2,8 @@
 
 #include "board_config.h"
 #include "esp_lvgl_port.h"
-#include "font_loader.h"
 #include "lvgl.h"
+extern const lv_font_t font_puhui_14_1;
 
 void ui_create_demo_screen(void)
 {
@@ -15,7 +15,7 @@ void ui_create_demo_screen(void)
     lv_obj_set_style_bg_color(screen, lv_color_hex(0x000000), 0);
     lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, 0);
 
-    const lv_font_t *text_font = font_loader_get();
+    const lv_font_t *text_font = &font_puhui_14_1;
     if (!text_font) {
         lvgl_port_unlock();
         return;

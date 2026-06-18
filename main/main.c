@@ -1,9 +1,10 @@
 #include "display.h"
-#include "font_loader.h"
+extern const lv_font_t font_puhui_14_1;
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "ui.h"
+#include "lv_demos.h"
 
 static const char *TAG = "st7789_240x240";
 
@@ -15,12 +16,11 @@ void app_main(void)
 
     display_init(&io_handle, &panel_handle, &disp);
 
-    if (!font_loader_init()) {
-        ESP_LOGE(TAG, "中文字库初始化失败");
-        return;
-    }
-
-    ui_create_demo_screen();
+    lv_demo_benchmark();
+    // lv_demo_widgets();
+    // lv_demo_stress();
+    // lv_demo_music();
+    // lv_demo_keypad_encoder();
 
     ESP_LOGI(TAG, "ST7789 240x240 初始化完成");
 
