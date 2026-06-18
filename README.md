@@ -113,3 +113,14 @@ lv_label_set_text(label, "今天天气怎么样");
 ## 许可证
 
 示例代码，可自由修改用于个人或商业项目。
+
+TODO：idf_component.yml 里声明的依赖：
+dependencies:
+  78/xiaozhi-fonts: ~1.6.0
+
+
+    lv_demo_benchmark(); 
+    lv_demo_keypad_encoder(); 
+    // lv_demo_music(); 
+    // lv_demo_stress(); 
+    // lv_demo_widgets();  我想在当前项目中 体验这lvgl项目
